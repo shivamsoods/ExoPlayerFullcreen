@@ -44,5 +44,8 @@ dependencies {
     //Card View
     implementation 'androidx.cardview:cardview:1.0.0'
 
+    //YouTube Extractor
+    implementation 'com.github.HaarigerHarald:android-youtubeExtractor:2.1.0'
+
 
 }

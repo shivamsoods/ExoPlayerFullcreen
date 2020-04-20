@@ -2,6 +2,7 @@ package com.shivam.videoplayer;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,8 +52,10 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
     private enum VolumeState {ON, OFF}
 
+    private enum PlaybackState {PLAY, PAUSE}
+
     // ui
-    private ImageView thumbnail, volumeControl;
+    private ImageView thumbnail, volumeControl, playbackControl;
     private ProgressBar progressBar;
     private View viewHolderParent;
     private FrameLayout frameLayout;
@@ -69,6 +73,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
     // controlling playback state
     private VolumeState volumeState;
+    private PlaybackState playbackState;
 
     public VideoPlayerRecyclerView(@NonNull Context context) {
         super(context);
@@ -81,7 +86,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
     }
 
 
-    private void init(Context context) {
+    private void init(@NonNull Context context) {
         this.context = context.getApplicationContext();
         Display display = ((WindowManager) Objects.requireNonNull(getContext().getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay();
         Point point = new Point();
@@ -111,6 +116,8 @@ public class VideoPlayerRecyclerView extends RecyclerView {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    setPlaybackControl(PlaybackState.PLAY);
+
                     Log.d(TAG, "onScrollStateChanged: called.");
                     if (thumbnail != null) { // show the old thumbnail
                         thumbnail.setVisibility(VISIBLE);
@@ -168,6 +175,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
                 switch (playbackState) {
 
                     case Player.STATE_BUFFERING:
+                        setPlaybackControl(PlaybackState.PAUSE);
                         Log.e(TAG, "onPlayerStateChanged: Buffering video.");
                         if (progressBar != null) {
                             progressBar.setVisibility(VISIBLE);
@@ -189,6 +197,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
                         }
                         if (!isVideoViewAdded) {
                             addVideoView();
+                            setPlaybackControl(PlaybackState.PLAY);
                         }
                         break;
                     default:
@@ -293,11 +302,13 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         volumeControl = holder.volumeControl;
         viewHolderParent = holder.itemView;
         requestManager = holder.requestManager;
-        frameLayout = holder.itemView.findViewById(R.id.media_container);
+        frameLayout = holder.mediaContainer;
+        playbackControl = holder.playbackControl;
 
         videoSurfaceView.setPlayer(videoPlayer);
 
-        viewHolderParent.setOnClickListener(videoViewClickListener);
+        volumeControl.setOnClickListener(volumeViewClickListener);
+        playbackControl.setOnClickListener(playbackViewClickListener);
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 context, Util.getUserAgent(context, "RecyclerView VideoPlayer"));
@@ -310,10 +321,17 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         }
     }
 
-    private OnClickListener videoViewClickListener = new OnClickListener() {
+    private OnClickListener volumeViewClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             toggleVolume();
+        }
+    };
+
+    private OnClickListener playbackViewClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            togglePlayback();
         }
     };
 
@@ -343,7 +361,6 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         }
     }
 
-
     // Remove the old player
     private void removeVideoView(PlayerView videoView) {
         ViewGroup parent = (ViewGroup) videoView.getParent();
@@ -361,7 +378,8 @@ public class VideoPlayerRecyclerView extends RecyclerView {
     }
 
     private void addVideoView() {
-        frameLayout.addView(videoSurfaceView);
+
+        frameLayout.addView(videoSurfaceView,2);
         isVideoViewAdded = true;
         videoSurfaceView.requestFocus();
         videoSurfaceView.setVisibility(VISIBLE);
@@ -387,6 +405,63 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
         viewHolderParent = null;
     }
+
+
+
+    private void togglePlayback() {
+        Toast.makeText(context, "RECHED HERE", Toast.LENGTH_SHORT).show();
+        if (videoPlayer != null) {
+            if (playbackState == PlaybackState.PLAY) {
+                Log.d(TAG, "togglePlaybackState: enabling Pause.");
+                Toast.makeText(context, "Pausing", Toast.LENGTH_SHORT).show();
+                setPlaybackControl(PlaybackState.PAUSE);
+
+            } else if (playbackState == PlaybackState.PAUSE) {
+                Log.d(TAG, "togglePlaybackState: enabling Play.");
+                Toast.makeText(context, "Playing", Toast.LENGTH_SHORT).show();
+
+                setPlaybackControl(PlaybackState.PLAY);
+
+            }
+        }
+    }
+
+    private void setPlaybackControl(PlaybackState state) {
+        playbackState = state;
+
+        if (state == PlaybackState.PLAY) {
+            videoPlayer.setPlayWhenReady(true);
+            animatePlaybackControl();
+
+        } else if (state == PlaybackState.PAUSE) {
+            videoPlayer.setPlayWhenReady(false);
+            animatePlaybackControl();
+
+        }
+    }
+
+    private void animatePlaybackControl() {
+        if (playbackControl != null) {
+
+            //playbackControl.bringToFront();
+            if(playbackState ==PlaybackState.PLAY){
+                requestManager.load(R.drawable.ic_pause_black_24dp)
+                        .into(playbackControl);
+            } else if(playbackState == PlaybackState.PAUSE){
+                requestManager.load(R.drawable.ic_play_arrow_black_24dp)
+                        .into(playbackControl);
+            }
+
+            playbackControl.animate().cancel();
+            playbackControl.setAlpha(1f);
+            playbackControl.animate()
+                    .alpha(1f)
+                    .setDuration(600).setStartDelay(1000);
+        }
+    }
+
+
+
 
     private void toggleVolume() {
         if (videoPlayer != null) {
@@ -415,7 +490,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
     private void animateVolumeControl() {
         if (volumeControl != null) {
-            volumeControl.bringToFront();
+           // volumeControl.bringToFront();
             if (volumeState == VolumeState.OFF) {
                 requestManager.load(R.drawable.ic_volume_off_grey_24dp)
                         .into(volumeControl);
@@ -428,10 +503,12 @@ public class VideoPlayerRecyclerView extends RecyclerView {
             volumeControl.setAlpha(1f);
 
             volumeControl.animate()
-                    .alpha(0f)
+                    .alpha(1f)
                     .setDuration(600).setStartDelay(1000);
         }
     }
+
+
 
     public void setMediaObjects(ArrayList<MediaObject> mediaObjects) {
         this.mediaObjects = mediaObjects;

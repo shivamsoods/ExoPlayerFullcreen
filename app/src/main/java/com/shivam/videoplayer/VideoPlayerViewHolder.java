@@ -2,6 +2,7 @@ package com.shivam.videoplayer;
 
 
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,7 +15,8 @@ import com.bumptech.glide.RequestManager;
 class VideoPlayerViewHolder extends RecyclerView.ViewHolder {
 
     private TextView title;
-    ImageView thumbnail, volumeControl;
+    ImageView thumbnail, volumeControl,playbackControl;
+    FrameLayout mediaContainer;
     ProgressBar progressBar;
     private View parent;
     RequestManager requestManager;
@@ -26,6 +28,8 @@ class VideoPlayerViewHolder extends RecyclerView.ViewHolder {
         title = itemView.findViewById(R.id.title);
         progressBar = itemView.findViewById(R.id.progressBar);
         volumeControl = itemView.findViewById(R.id.volume_control);
+        playbackControl=itemView.findViewById(R.id.playback_control);
+        mediaContainer=itemView.findViewById(R.id.media_container);
     }
 
     void onBind(MediaObject mediaObject, RequestManager requestManager) {
