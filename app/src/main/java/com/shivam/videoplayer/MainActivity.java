@@ -53,4 +53,18 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.releasePlayer();
         super.onDestroy();
     }
+
+    @Override
+    protected void onPause() {
+        if (mRecyclerView != null)
+            mRecyclerView.pausePlayer();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        if (mRecyclerView != null)
+            mRecyclerView.resumePlayer();
+        super.onResume();
+    }
 }

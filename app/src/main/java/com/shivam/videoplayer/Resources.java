@@ -5,12 +5,12 @@ package com.shivam.videoplayer;
 class Resources {
 
     static final MediaObject[] MEDIA_OBJECTS = {
-            new MediaObject("Sending Data to a New Activity with Intent Extras",
-                    "https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/Sending+Data+to+a+New+Activity+with+Intent+Extras.mp4",
+            new MediaObject("Playing Youtube Video ",
+                    "https://r2---sn-cnoa-na8e.googlevideo.com/videoplayback?expire=1587407080&ei=iJSdXtzcLN6BsfIPtPiesAg&ip=107.178.102.215&id=o-AHO58-ghqFl9ca14PigqnmORnrQ0T9V9s64W9zb_YgmP&itag=18&source=youtube&requiressl=yes&vprv=1&mime=video%2Fmp4&gir=yes&clen=77953100&ratebypass=yes&dur=1477.880&lmt=1587133539248220&fvip=2&c=WEB&txp=7316222&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&sig=AJpPlLswRQIhANsPZptr-l2xOznrT8NAYJqLN-kFHC_gZfy6C0lhmmqDAiBMnW0-4pvJBOwHxFx-taz5A8CT5ly9M6jW4jW4Y3SwOQ%3D%3D&title=Lockdown:+20+April+%E0%A4%B8%E0%A5%87+%E0%A4%A6%E0%A5%87%E0%A4%B6+%E0%A4%AE%E0%A5%87%E0%A4%82+%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE+%E0%A4%96%E0%A5%81%E0%A4%B2%E0%A5%87%E0%A4%97%E0%A4%BE,+%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE+%E0%A4%AC%E0%A4%82%E0%A4%A6+%E0%A4%B0%E0%A4%B9%E0%A5%87%E0%A4%97%E0%A4%BE&+|+ABP+News+Hindi=&redirect_counter=1&rm=sn-a5mrk7l&req_id=26c2b3268fc3a3ee&cms_redirect=yes&ipbypass=yes&mh=pR&mip=59.92.135.123&mm=31&mn=sn-cnoa-na8e&ms=au&mt=1587385234&mv=u&mvi=1&pcm2cms=yes&pl=23&lsparams=ipbypass,mh,mip,mm,mn,ms,mv,mvi,pcm2cms,pl&lsig=ALrAebAwRQIhAMIe7s2uLiA2yXpLfaTji83LDJ7Mp7MU1MXZtnwIaiPEAiA7ko87mB0DWPmDq2BGUyO7CQK-EoyocbC81GGY512Jcg%3D%3D",
                     "https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/Sending+Data+to+a+New+Activity+with+Intent+Extras.png",
                     "Description for media object #1"),
 
-            new MediaObject("REST API, Retrofit2, MVVM Course SUMMARY",
+            new MediaObject("Playing Server Video",
                     "https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/REST+API+Retrofit+MVVM+Course+Summary.mp4",
                     "https://s3.ca-central-1.amazonaws.com/codingwithmitch/media/VideoPlayerRecyclerView/REST+API%2C+Retrofit2%2C+MVVM+Course+SUMMARY.png",
                     "Description for media object #2"),

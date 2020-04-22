@@ -15,7 +15,7 @@ import com.bumptech.glide.RequestManager;
 class VideoPlayerViewHolder extends RecyclerView.ViewHolder {
 
     private TextView title;
-    ImageView thumbnail, volumeControl,playbackControl;
+    ImageView thumbnail, volumeControl,playbackControl,screenControl;
     FrameLayout mediaContainer;
     ProgressBar progressBar;
     private View parent;
@@ -30,6 +30,7 @@ class VideoPlayerViewHolder extends RecyclerView.ViewHolder {
         volumeControl = itemView.findViewById(R.id.volume_control);
         playbackControl=itemView.findViewById(R.id.playback_control);
         mediaContainer=itemView.findViewById(R.id.media_container);
+        screenControl=itemView.findViewById(R.id.fullscreen_control);
     }
 
     void onBind(MediaObject mediaObject, RequestManager requestManager) {
