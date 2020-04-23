@@ -1,9 +1,7 @@
 package com.shivam.videoplayer;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -77,6 +75,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
     private boolean isVideoViewAdded;
     private RequestManager requestManager;
 
+
     // controlling playback state
     private VolumeState volumeState;
     private PlaybackState playbackState;
@@ -113,10 +112,10 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         // 2. Create the player
         videoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
         // Bind the player to the view.
-        videoSurfaceView.setUseController(true);
+        videoSurfaceView.setUseController(false);
         videoSurfaceView.setPlayer(videoPlayer);
         setVolumeControl(VolumeState.ON);
-        screenState=ScreenState.SMALL;
+        screenState = ScreenState.SMALL;
 
         addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -243,6 +242,9 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
             }
         });
+
+        initFulScreenDialog();
+
     }
 
     public void playVideo(boolean isEndOfList) {
@@ -392,7 +394,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
 
     private void addVideoView() {
-        frameLayout.addView(videoSurfaceView, 1);
+        frameLayout.addView(videoSurfaceView);
         isVideoViewAdded = true;
         videoSurfaceView.requestFocus();
         videoSurfaceView.setVisibility(VISIBLE);
@@ -462,7 +464,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
     private void animatePlaybackControl() {
         if (playbackControl != null) {
 
-            //playbackControl.bringToFront();
+            playbackControl.bringToFront();
             if (playbackState == PlaybackState.PLAY) {
                 requestManager.load(R.drawable.ic_pause_black_24dp)
                         .into(playbackControl);
@@ -474,7 +476,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
             playbackControl.animate().cancel();
             playbackControl.setAlpha(1f);
             playbackControl.animate()
-                    .alpha(1f)
+                    .alpha(0f)
                     .setDuration(600).setStartDelay(1000);
         }
     }
@@ -511,7 +513,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
     private void animateVolumeControl() {
         if (volumeControl != null) {
-            // volumeControl.bringToFront();
+            volumeControl.bringToFront();
             if (volumeState == VolumeState.OFF) {
                 requestManager.load(R.drawable.ic_volume_off_grey_24dp)
                         .into(volumeControl);
@@ -520,11 +522,9 @@ public class VideoPlayerRecyclerView extends RecyclerView {
                         .into(volumeControl);
             }
             volumeControl.animate().cancel();
-
             volumeControl.setAlpha(1f);
-
             volumeControl.animate()
-                    .alpha(1f)
+                    .alpha(0f)
                     .setDuration(600).setStartDelay(1000);
         }
     }
@@ -534,19 +534,15 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         if (videoPlayer != null) {
             if (screenState == ScreenState.FULL) {
                 Toast.makeText(context, "Small Screen", Toast.LENGTH_SHORT).show();
-
                 setScreenControl(ScreenState.SMALL);
             } else if (screenState == ScreenState.SMALL) {
                 Toast.makeText(context, "Big Screen", Toast.LENGTH_SHORT).show();
-
-
                 setScreenControl(ScreenState.FULL);
             }
         }
     }
 
     private void setScreenControl(ScreenState state) {
-        screenState = state;
 
         if (state == ScreenState.SMALL) {
             Log.d(TAG, "setScreenControl: Going Small screen");
@@ -555,13 +551,29 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
         } else if (state == ScreenState.FULL) {
             Log.d(TAG, "setScreenControl: Going full screen");
-
-            initFulScreenDialog();
             openFullScreenDialog();
             screenState = ScreenState.FULL;
 
         }
 
+    }
+
+    private void animateScreenControl(){
+        if (screenControl != null) {
+            screenControl.bringToFront();
+            if (screenState == ScreenState.FULL) {
+                requestManager.load(R.drawable.ic_fullscreen_black_24dp)
+                        .into(screenControl);
+            } else if (screenState == ScreenState.SMALL) {
+                requestManager.load(R.drawable.ic_fullscreen_exit_black_24dp)
+                        .into(screenControl);
+            }
+            screenControl.animate().cancel();
+            screenControl.setAlpha(1f);
+            screenControl.animate()
+                    .alpha(0f)
+                    .setDuration(600).setStartDelay(1000);
+        }
     }
 
     private void initFulScreenDialog() {
@@ -575,13 +587,17 @@ public class VideoPlayerRecyclerView extends RecyclerView {
     }
 
     private void openFullScreenDialog() {
-        removeVideoView(videoSurfaceView);
+       // removeVideoView(videoSurfaceView);
+        ((ViewGroup) videoSurfaceView.getParent()).removeView(videoSurfaceView);
+        videoSurfaceView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
         fullScreenDialog.addContentView(videoSurfaceView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         fullScreenDialog.show();
     }
 
     private void closeFullScreenDialog() {
         ((ViewGroup) videoSurfaceView.getParent()).removeView(videoSurfaceView);
+        fullScreenDialog.dismiss();
+        videoSurfaceView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM);
         frameLayout.addView(videoSurfaceView);
 
     }
