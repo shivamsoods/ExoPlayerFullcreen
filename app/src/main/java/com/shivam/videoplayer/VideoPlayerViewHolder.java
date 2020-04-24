@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
+import com.google.android.exoplayer2.ui.PlayerView;
 
 class VideoPlayerViewHolder extends RecyclerView.ViewHolder {
 
@@ -22,6 +23,7 @@ class VideoPlayerViewHolder extends RecyclerView.ViewHolder {
     private View parent;
     RequestManager requestManager;
     LinearLayout llPlayer,llParent,llControl;
+    PlayerView playerView;
 
     VideoPlayerViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -36,6 +38,7 @@ class VideoPlayerViewHolder extends RecyclerView.ViewHolder {
         llPlayer=itemView.findViewById(R.id.ll_player);
         llParent=itemView.findViewById(R.id.parent);
         llControl=itemView.findViewById(R.id.ll_control);
+        playerView=itemView.findViewById(R.id.playerView);
     }
 
     void onBind(MediaObject mediaObject, RequestManager requestManager) {

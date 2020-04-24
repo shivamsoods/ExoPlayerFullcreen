@@ -104,8 +104,8 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         videoSurfaceDefaultHeight = point.x;
         screenDefaultHeight = point.y;
 
-        videoSurfaceView = new PlayerView(this.context);
-        videoSurfaceView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM);
+        // videoSurfaceView = new PlayerView(this.context);
+        //videoSurfaceView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM);
 
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
@@ -116,8 +116,8 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         // 2. Create the player
         videoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
         // Bind the player to the view.
-        videoSurfaceView.setUseController(false);
-        videoSurfaceView.setPlayer(videoPlayer);
+        //videoSurfaceView.setUseController(false);
+        // videoSurfaceView.setPlayer(videoPlayer);
 
 
         setVolumeControl(VolumeState.ON);
@@ -302,13 +302,15 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
         // set the position of the list-item that is to be played
         playPosition = targetPosition;
-        if (videoSurfaceView == null) {
-            return;
-        }
+//        if (videoSurfaceView == null) {
+//            return;
+//        }
 
         // remove any old surface views from previously playing videos
-        videoSurfaceView.setVisibility(INVISIBLE);
-        removeVideoView(videoSurfaceView);
+        if(videoSurfaceView != null){
+            videoSurfaceView.setVisibility(INVISIBLE);
+            removeVideoView(videoSurfaceView);
+        }
 
         int currentPosition = targetPosition - ((LinearLayoutManager) Objects.requireNonNull(getLayoutManager())).findFirstVisibleItemPosition();
 
@@ -333,7 +335,10 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         llPlayer = holder.llPlayer;
         llParent = holder.llParent;
         llControl = holder.llControl;
+        videoSurfaceView = holder.playerView;
 
+
+        videoSurfaceView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM);
         videoSurfaceView.setPlayer(videoPlayer);
 
         volumeControl.setOnClickListener(new OnClickListener() {
@@ -412,6 +417,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 
 
     private void addVideoView() {
+        frameLayout.removeView(videoSurfaceView);
         frameLayout.addView(videoSurfaceView);
         isVideoViewAdded = true;
         videoSurfaceView.requestFocus();
