@@ -34,35 +34,35 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/ll_control"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/ll_control"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:visibility="gone">-->
 
-            <ImageView
-                android:id="@+id/playback_control"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:animateLayoutChanges="true"
-                android:src="@drawable/ic_play_arrow_black_24dp" />
+<!--            <ImageView-->
+<!--                android:id="@+id/playback_control"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:animateLayoutChanges="true"-->
+<!--                android:src="@drawable/ic_play_arrow_black_24dp" />-->
 
-            <ImageView
-                android:id="@+id/volume_control"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:animateLayoutChanges="true"
-                android:src="@drawable/ic_volume_up_grey_24dp" />
+<!--            <ImageView-->
+<!--                android:id="@+id/volume_control"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:animateLayoutChanges="true"-->
+<!--                android:src="@drawable/ic_volume_up_grey_24dp" />-->
 
-            <ImageView
-                android:id="@+id/fullscreen_control"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:animateLayoutChanges="true"
-                android:src="@drawable/ic_fullscreen_black_24dp" />
+<!--            <ImageView-->
+<!--                android:id="@+id/fullscreen_control"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:animateLayoutChanges="true"-->
+<!--                android:src="@drawable/ic_fullscreen_black_24dp" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
         <FrameLayout
             android:id="@+id/media_container"
@@ -76,6 +76,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.exoplayer2.ui.PlayerView
+                app:controller_layout_id="@layout/custom_control"
                 android:id="@+id/playerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

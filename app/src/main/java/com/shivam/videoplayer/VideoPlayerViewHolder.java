@@ -32,12 +32,12 @@ class VideoPlayerViewHolder extends RecyclerView.ViewHolder {
         title = itemView.findViewById(R.id.title);
         progressBar = itemView.findViewById(R.id.progressBar);
         volumeControl = itemView.findViewById(R.id.volume_control);
-        playbackControl=itemView.findViewById(R.id.playback_control);
+       // playbackControl=itemView.findViewById(R.id.playback_control);
         mediaContainer=itemView.findViewById(R.id.media_container);
         screenControl=itemView.findViewById(R.id.fullscreen_control);
         llPlayer=itemView.findViewById(R.id.ll_player);
         llParent=itemView.findViewById(R.id.parent);
-        llControl=itemView.findViewById(R.id.ll_control);
+       // llControl=itemView.findViewById(R.id.ll_control);
         playerView=itemView.findViewById(R.id.playerView);
     }
 

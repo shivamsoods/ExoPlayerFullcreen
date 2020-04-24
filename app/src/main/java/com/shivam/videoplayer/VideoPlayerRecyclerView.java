@@ -330,11 +330,11 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         viewHolderParent = holder.itemView;
         requestManager = holder.requestManager;
         frameLayout = holder.mediaContainer;
-        playbackControl = holder.playbackControl;
+      //  playbackControl = holder.playbackControl;
         screenControl = holder.screenControl;
         llPlayer = holder.llPlayer;
         llParent = holder.llParent;
-        llControl = holder.llControl;
+        //llControl = holder.llControl;
         videoSurfaceView = holder.playerView;
 
 
@@ -347,12 +347,12 @@ public class VideoPlayerRecyclerView extends RecyclerView {
                 toggleVolume();
             }
         });
-        playbackControl.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                togglePlayback();
-            }
-        });
+//        playbackControl.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                togglePlayback();
+//            }
+//        });
 
         screenControl.setOnClickListener(new OnClickListener() {
             @Override
