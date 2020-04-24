@@ -67,4 +67,11 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.resumePlayer();
         super.onResume();
     }
+
+    @Override
+    protected void onStop() {
+        if (mRecyclerView != null)
+            mRecyclerView.pausePlayer();
+        super.onStop();
+    }
 }
