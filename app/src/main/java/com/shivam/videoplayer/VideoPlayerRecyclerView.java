@@ -2,7 +2,9 @@ package com.shivam.videoplayer;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -65,6 +68,7 @@ public class VideoPlayerRecyclerView extends RecyclerView {
     private PlayerView videoSurfaceView;
     private SimpleExoPlayer videoPlayer;
     private Dialog fullScreenDialog;
+    private LinearLayout llPlayer, llParent, llControl;
 
     // vars
     private ArrayList<MediaObject> mediaObjects = new ArrayList<>();
@@ -192,6 +196,9 @@ public class VideoPlayerRecyclerView extends RecyclerView {
                         if (progressBar != null) {
                             progressBar.setVisibility(VISIBLE);
                         }
+                        if (llControl != null) {
+                            llControl.setVisibility(View.GONE);
+                        }
 
                         break;
                     case Player.STATE_ENDED:
@@ -206,6 +213,9 @@ public class VideoPlayerRecyclerView extends RecyclerView {
                         Log.e(TAG, "onPlayerStateChanged: Ready to play.");
                         if (progressBar != null) {
                             progressBar.setVisibility(GONE);
+                        }
+                        if (llControl != null) {
+                            llControl.setVisibility(View.VISIBLE);
                         }
                         if (!isVideoViewAdded) {
                             addVideoView();
@@ -320,6 +330,9 @@ public class VideoPlayerRecyclerView extends RecyclerView {
         frameLayout = holder.mediaContainer;
         playbackControl = holder.playbackControl;
         screenControl = holder.screenControl;
+        llPlayer = holder.llPlayer;
+        llParent = holder.llParent;
+        llControl = holder.llControl;
 
         videoSurfaceView.setPlayer(videoPlayer);
 
@@ -575,10 +588,10 @@ public class VideoPlayerRecyclerView extends RecyclerView {
 //            screenControl.bringToFront();
 //            screenControl.setAlpha(1f);
             if (screenState == ScreenState.FULL) {
-                requestManager.load(R.drawable.ic_fullscreen_black_24dp)
+                requestManager.load(R.drawable.ic_fullscreen_exit_black_24dp)
                         .into(screenControl);
             } else if (screenState == ScreenState.SMALL) {
-                requestManager.load(R.drawable.ic_fullscreen_exit_black_24dp)
+                requestManager.load(R.drawable.ic_fullscreen_black_24dp)
                         .into(screenControl);
             }
 //            screenControl.animate().cancel();
@@ -599,22 +612,33 @@ public class VideoPlayerRecyclerView extends RecyclerView {
                 super.onBackPressed();
             }
         };
+        fullScreenDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.GRAY));
     }
 
     private void openFullScreenDialog() {
         // removeVideoView(videoSurfaceView);
-        ((ViewGroup) videoSurfaceView.getParent()).removeView(videoSurfaceView);
+        //((ViewGroup) videoSurfaceView.getParent()).removeView(videoSurfaceView);
+        ((ViewGroup) llPlayer.getParent()).removeView(llPlayer);
+
+
         videoSurfaceView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
-        fullScreenDialog.addContentView(videoSurfaceView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fullScreenDialog.addContentView(llPlayer, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         fullScreenDialog.show();
     }
 
     private void closeFullScreenDialog() {
-        ((ViewGroup) videoSurfaceView.getParent()).removeView(videoSurfaceView);
+        //((ViewGroup) videoSurfaceView.getParent()).removeView(videoSurfaceView);
+        ((ViewGroup) llPlayer.getParent()).removeView(llPlayer);
+
         fullScreenDialog.dismiss();
         videoSurfaceView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_ZOOM);
-        frameLayout.addView(videoSurfaceView);
-        videoSurfaceView.requestFocus();
+
+        llParent.addView(llPlayer);
+        llParent.requestFocus();
+
+        //frameLayout.addView(videoSurfaceView);
+        //frameLayout.addView(llControl);
+        //videoSurfaceView.requestFocus();
 
     }
 
